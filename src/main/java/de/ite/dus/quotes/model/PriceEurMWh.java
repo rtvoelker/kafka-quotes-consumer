@@ -1,4 +1,4 @@
-package de.ite.dus.quotes;
+package de.ite.dus.quotes.model;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package de.ite.dus.quotes;
+package de.ite.dus.quotes.model;
 
 public class Quote {
     private PriceEurMWh bidPrice;
