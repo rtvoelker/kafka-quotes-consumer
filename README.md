@@ -1,0 +1,1 @@
+# kafka-quotes-consumer
