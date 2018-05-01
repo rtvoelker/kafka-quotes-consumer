@@ -1,6 +1,6 @@
 package de.ite.dus.quotes;
 
-public class QuotesSetSerializerTestExpectedOutput {
+public class QuotesSetTestJsonExample {
     static final String SINGLE_MONTH_PRODUCT = "{\"timeStamp\":\"2018-05-01T14:08:17.135\"," +
             "\"country\":\"DE\"," +
             "\"products\":[{" +

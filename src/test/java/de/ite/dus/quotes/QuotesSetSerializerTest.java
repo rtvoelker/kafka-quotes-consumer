@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Collections;
 
-import static de.ite.dus.quotes.QuotesSetSerializerTestExpectedOutput.SINGLE_MONTH_PRODUCT;
+import static de.ite.dus.quotes.QuotesSetTestJsonExample.SINGLE_MONTH_PRODUCT;
 import static de.ite.dus.quotes.model.Country.DE;
 import static java.time.Month.MAY;
 import static org.assertj.core.api.Assertions.assertThat;
