@@ -1,6 +1,6 @@
 package de.ite.dus.quotes;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+import de.ite.dus.quotes.model.QuotesSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
