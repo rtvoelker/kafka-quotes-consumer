@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.time.Year;
 
-import static de.ite.dus.quotes.QuotesSetTestJsonExample.SINGLE_MONTH_PRODUCT;
+import static de.ite.dus.quotes.QuotesSetTestJsonExample.QUOTESET_MONTHPRODUCT;
 import static de.ite.dus.quotes.model.Country.DE;
 import static java.time.Month.MAY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,7 @@ public class QuotesSetDeserializerTest {
 
     @Test
     public void deserializeQuotesSet_singleMonthProduct() throws IOException {
-        QuotesSet quotesSet = new ObjectMapper().readValue(SINGLE_MONTH_PRODUCT, QuotesSet.class);
+        QuotesSet quotesSet = new ObjectMapper().readValue(QUOTESET_MONTHPRODUCT, QuotesSet.class);
         assertThat(quotesSet).isNotNull();
         assertThat(quotesSet.getTimestamp()).isNotNull();
         assertThat(quotesSet.getCountry()).isEqualTo(DE);

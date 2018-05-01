@@ -2,18 +2,16 @@ package de.ite.dus.quotes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ite.dus.quotes.model.MonthProduct;
-import de.ite.dus.quotes.model.PriceEurMWh;
-import de.ite.dus.quotes.model.Quote;
-import de.ite.dus.quotes.model.QuotesSet;
+import de.ite.dus.quotes.model.*;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Collections;
+import java.util.Arrays;
 
-import static de.ite.dus.quotes.QuotesSetTestJsonExample.SINGLE_MONTH_PRODUCT;
+import static de.ite.dus.quotes.QuotesSetTestJsonExample.*;
 import static de.ite.dus.quotes.model.Country.DE;
+import static de.ite.dus.quotes.model.QuarterProduct.Quarter.Q2;
 import static java.time.Month.MAY;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,15 +19,38 @@ public class QuotesSetSerializerTest {
 
     @Test
     public void serializeQuotesSet_singleMonthProduct() throws JsonProcessingException {
-        String strJson = new ObjectMapper().writeValueAsString(createQuotesSet());
-        assertThat(strJson).isEqualTo(SINGLE_MONTH_PRODUCT);
+        QuotesSet quotesSet = createQuotesSet(createMonthProduct());
+        String strJson = new ObjectMapper().writeValueAsString(quotesSet);
+        assertThat(strJson).isEqualTo(QUOTESET_MONTHPRODUCT);
     }
 
-    private QuotesSet createQuotesSet() {
+    @Test
+    public void serializeQuotesSet_singleQuarterProduct() throws JsonProcessingException {
+        QuotesSet quotesSet = createQuotesSet(createQuarterProduct());
+        String strJson = new ObjectMapper().writeValueAsString(quotesSet);
+        assertThat(strJson).isEqualTo(QUOTESET_QUARTERPRODUCT);
+    }
+
+    @Test
+    public void serializeQuotesSet_singleYearProduct() throws JsonProcessingException {
+        QuotesSet quotesSet = createQuotesSet(createYearProduct());
+        String strJson = new ObjectMapper().writeValueAsString(quotesSet);
+        assertThat(strJson).isEqualTo(QUOTESET_YEARPRODUCT);
+    }
+
+    @Test
+    public void serializeQuotesSet_MonthQuarterAndYearProduct() throws JsonProcessingException {
+        QuotesSet quotesSet = createQuotesSet(createMonthProduct(),
+                createQuarterProduct(), createYearProduct());
+        String strJson = new ObjectMapper().writeValueAsString(quotesSet);
+        assertThat(strJson).isEqualTo(QUOTESET_MONTH_QUARTER_YEAR_PRODUCTS);
+    }
+
+    private QuotesSet createQuotesSet(Product... products) {
         QuotesSet quotesSet = new QuotesSet();
-        quotesSet.setTimestamp(LocalDateTime.of(2018, 05, 01, 14, 8, 17, 135000000));
+        quotesSet.setTimestamp(LocalDateTime.of(2018, 5, 1, 14, 8, 17, 135000000));
         quotesSet.setCountry(DE);
-        quotesSet.setProducts(Collections.singletonList(createMonthProduct()));
+        quotesSet.setProducts(Arrays.asList(products));
         return quotesSet;
     }
 
@@ -39,6 +60,23 @@ public class QuotesSetSerializerTest {
         product.setMonth(MAY);
         product.setBaseQuote(createQuote(0.5001, 0.5201));
         product.setPeakQuote(createQuote(2.0001, 2.0201));
+        return product;
+    }
+
+    private QuarterProduct createQuarterProduct() {
+        QuarterProduct product = new QuarterProduct();
+        product.setYear(Year.of(2021));
+        product.setQuarter(Q2);
+        product.setBaseQuote(createQuote(0.4999, 0.5099));
+        product.setPeakQuote(createQuote(1.9998, 2.0999));
+        return product;
+    }
+
+    private YearProduct createYearProduct() {
+        YearProduct product = new YearProduct();
+        product.setYear(Year.of(2021));
+        product.setBaseQuote(createQuote(0.4899, 0.4998));
+        product.setPeakQuote(createQuote(1.9898, 2.0899));
         return product;
     }
 
