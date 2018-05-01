@@ -7,7 +7,11 @@ import de.ite.dus.quotes.model.*;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @JsonComponent
 public class QuotesSetSerializer extends JsonSerializer<QuotesSet> {
@@ -17,7 +21,7 @@ public class QuotesSetSerializer extends JsonSerializer<QuotesSet> {
             throws IOException {
 
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("timeStamp", quotesSet.getTimestamp().toString());
+        jsonGenerator.writeStringField("timeStamp", quotesSet.getTimestamp().format(ISO_LOCAL_DATE_TIME));
         jsonGenerator.writeStringField("country", quotesSet.getCountry().name());
         serializeProducts(quotesSet.getProducts(), jsonGenerator);
         jsonGenerator.writeEndObject();
@@ -33,18 +37,11 @@ public class QuotesSetSerializer extends JsonSerializer<QuotesSet> {
 
     private void serializeProduct(Product product, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartObject();
-        String productType = determineProductFieldName(product);
-        jsonGenerator.writeStringField("productType", productType);
         jsonGenerator.writeStringField("year", product.getYear().toString());
         serializeProductTypeDependentFields(product, jsonGenerator);
         serializeQuote("base", product.getBaseQuote(), jsonGenerator);
         serializeQuote("peak", product.getPeakQuote(), jsonGenerator);
         jsonGenerator.writeEndObject();
-    }
-
-    private String determineProductFieldName(Product product) {
-        String baseName = product.getClass().getSimpleName();
-        return baseName.substring(0, 1).toLowerCase() + baseName.substring(1);
     }
 
     private void serializeProductTypeDependentFields(Product product, JsonGenerator jsonGenerator) throws IOException {
