@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import de.ite.dus.quotes.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
@@ -21,18 +22,24 @@ import java.util.List;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @JsonComponent
+@Slf4j
 public class QuotesSetDeserializer extends JsonDeserializer<QuotesSet> {
 
     @Override
     public QuotesSet deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {
-        TreeNode rootNode = jsonParser.getCodec().readTree(jsonParser);
+        try {
+            TreeNode rootNode = jsonParser.getCodec().readTree(jsonParser);
 
-        QuotesSet quotesSet = new QuotesSet();
-        quotesSet.setTimestamp(parseTimestamp(rootNode));
-        quotesSet.setCountry(parseCountry(rootNode));
-        quotesSet.setProducts(parseProducts(rootNode));
-        return quotesSet;
+            QuotesSet quotesSet = new QuotesSet();
+            quotesSet.setTimestamp(parseTimestamp(rootNode));
+            quotesSet.setCountry(parseCountry(rootNode));
+            quotesSet.setProducts(parseProducts(rootNode));
+            return quotesSet;
+        } catch(Exception e) {
+            log.error("error parsing quoteset from json:" + e.getMessage());
+            return null;
+        }
     }
 
     private LocalDateTime parseTimestamp(TreeNode rootNode) {
